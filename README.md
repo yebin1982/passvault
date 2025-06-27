@@ -1,2 +1,3 @@
 # passvault
-A webapp that stores all your secrets in one place.
+
+A WebAPP that stores all your secrets in one place.
