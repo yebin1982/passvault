@@ -6,24 +6,28 @@ import {
   Button,
   Typography,
   Box,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
 import { loginUser } from '../store/authSlice';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch<AppDispatch>();
+  const { status, error } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       await dispatch(loginUser({ username, password })).unwrap();
-      navigate('/');
+      navigate('/vault'); // Navigate to a protected route after login
     } catch (error) {
       console.error('Failed to login:', error);
+      // Error is now handled by the UI via the Redux state
     }
   };
 
@@ -41,6 +45,11 @@ const LoginPage = () => {
           Login
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {typeof error === 'string' ? error : error.message}
+            </Alert>
+          )}
           <TextField
             margin="normal"
             required
@@ -70,8 +79,9 @@ const LoginPage = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={status === 'loading'}
           >
-            Sign In
+            {status === 'loading' ? <CircularProgress size={24} /> : 'Sign In'}
           </Button>
         </Box>
       </Box>
