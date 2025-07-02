@@ -3,12 +3,21 @@ import axios from '../api/axios';
 import { deriveKey, generateSalt } from '../crypto/keyDerivation';
 import { encryptData } from '../crypto/encryption';
 
+interface UserCredentials {
+  username: string;
+  password: string;
+}
+
+interface LoginResponse {
+  token: string;
+}
+
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ username, password }: any, { rejectWithValue }) => {
+  async ({ username, password }: UserCredentials, { rejectWithValue }) => {
     try {
       const response = await axios.post('/auth/login', { username, password });
-      return response.data;
+      return response.data as LoginResponse;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
@@ -17,7 +26,7 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
-  async ({ username, password }: any, { rejectWithValue }) => {
+  async ({ username, password }: UserCredentials, { rejectWithValue }) => {
     try {
       const salt = generateSalt();
       const hashedPassword = await deriveKey(password, salt);
