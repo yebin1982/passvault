@@ -7,17 +7,17 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
  */
 export class CreateUserDto {
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
-  masterPasswordHash: string;
+  masterPasswordHash!: string;
 
   @IsString()
   @IsNotEmpty()
-  masterPasswordSalt: string;
+  masterPasswordSalt!: string;
 
   @IsString()
   @IsNotEmpty()
-  encryptionKeySalt: string;
+  encryptionKeySalt!: string;
 }

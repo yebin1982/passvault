@@ -7,5 +7,5 @@ export class CreateBulkItemsDto {
   @ValidateNested({ each: true })
   @Type(() => CreateVaultItemDto)
   @IsNotEmpty()
-  items: CreateVaultItemDto[];
+  items!: CreateVaultItemDto[];
 }
