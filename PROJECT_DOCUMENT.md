@@ -127,6 +127,9 @@ Security is the most critical aspect of this project. The following measures wil
 ### 5.2. Vault Features
 
 - **CRUD for Secrets:** Create, Read, Update, and Delete vault items (logins, secure notes, etc.).
+- **Bulk Import from CSV:** Allow users to import multiple secrets at once by uploading a CSV file.
+  - The CSV file must have the columns: `service`, `username`, `password`, `note`.
+  - All parsing and encryption of the CSV data will be performed client-side to maintain the zero-knowledge security model. The server will only receive the final encrypted vault items.
 - **Password Generator:** A strong, configurable password generator (length, characters, symbols).
 - **Search & Filtering:** Instantly search and filter vault items.
 - **Organization:** Ability to organize items into folders or categories.
@@ -164,6 +167,7 @@ Security is the most critical aspect of this project. The following measures wil
 4.  **Phase 4: Feature Enhancement & UI Polish**
 
     - Implement the password generator, search functionality, and 2FA.
+    - Implement bulk import from CSV.
     - Refine the entire UI/UX for a polished, professional feel.
     - Implement light/dark themes.
 
