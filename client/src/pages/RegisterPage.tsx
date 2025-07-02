@@ -6,15 +6,18 @@ import {
   Button,
   Typography,
   Box,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
 import { registerUser } from '../store/authSlice';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch<AppDispatch>();
+  const { status, error } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -24,6 +27,7 @@ const RegisterPage = () => {
       navigate('/login');
     } catch (error) {
       console.error('Failed to register:', error);
+      // Error is now handled by the UI via the Redux state
     }
   };
 
@@ -41,6 +45,11 @@ const RegisterPage = () => {
           Register
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {status === 'failed' && error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {typeof error === 'string' ? error : error.message}
+            </Alert>
+          )}
           <TextField
             margin="normal"
             required
@@ -70,8 +79,9 @@ const RegisterPage = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={status === 'loading'}
           >
-            Sign Up
+            {status === 'loading' ? <CircularProgress size={24} /> : 'Sign Up'}
           </Button>
         </Box>
       </Box>

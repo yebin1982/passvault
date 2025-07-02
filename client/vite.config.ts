@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import wasm from 'vite-plugin-wasm';
-import topLevelAwait from 'vite-plugin-top-level-await';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), wasm(), topLevelAwait()],
-  optimizeDeps: {
-    // This is necessary because `argon2-browser` uses wasm.
-    exclude: ['argon2-browser'],
+  plugins: [react()],
+  resolve: {
+    alias: {
+      // Use the asm.js version of argon2-browser to avoid wasm loading issues with Vite
+      'argon2-browser': 'argon2-browser/dist/argon2.asm.js',
+    },
   },
 });
